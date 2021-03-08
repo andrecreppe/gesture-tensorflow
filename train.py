@@ -125,6 +125,7 @@ runTrainingCommand = 'python {}/research/object_detection/model_main_tf2.py --mo
 
 if runnow:
   os.system(runTrainingCommand)
+  print('[train.py] Finished training model')
 else:
   print('[train.py] Execute this command later in the project folder:')
   print('> ' + runTrainingCommand)

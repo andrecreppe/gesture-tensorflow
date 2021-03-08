@@ -14,15 +14,16 @@ imgQtd = 15
 
 print('[collector.py] Preparing capture')
 
+cap = cv2.VideoCapture(0)
+
 for label in labels:
   newdirpath = os.path.join('Tensorflow', 'workspace', 'images', 'collectedImages', label)
 
   if not os.path.exists(newdirpath):
-    print('Created new directory: {}' + newdirpath)
+    print('[collector.py] Created new directory: {}'.format(newdirpath))
     os.mkdir(newdirpath)
   
-  cap = cv2.VideoCapture(0)
-  print('Collecting images for {}'.format(label))
+  print('[collector.py] Collecting images for {}'.format(label))
   time.sleep(5)
 
   count = 1
@@ -31,8 +32,6 @@ for label in labels:
     ret, frame = cap.read()
     imgname = label + '.' + '{}.jpg'.format(str(uuid.uuid1()))
     newimgpath = os.path.join(IMG_PATH, label, imgname)
-    
-    frameName = '{} - Frame {}'.format(label, count) 
 
     cv2.imwrite(newimgpath, frame)
     cv2.imshow('Frame', frame)
@@ -42,6 +41,8 @@ for label in labels:
       break
 
     count += 1
-  
-  cap.release()
-  cv2.destroyAllWindows()
+
+print('[collector.py] Finished collecting images!')
+
+cap.release()
+cv2.destroyAllWindows()
