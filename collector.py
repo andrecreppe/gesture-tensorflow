@@ -8,7 +8,7 @@ import uuid
 IMG_PATH = 'Tensorflow/workspace/images/collectedImages'
 
 labels = ['hello', 'thanks', 'yes', 'no', 'iloveyou']
-qtd = 15
+imgQtd = 15
 
 #
 
@@ -27,7 +27,7 @@ for label in labels:
 
   count = 1
   
-  for imgnum in range(qtd):
+  for imgnum in range(imgQtd):
     ret, frame = cap.read()
     imgname = label + '.' + '{}.jpg'.format(str(uuid.uuid1()))
     newimgpath = os.path.join(IMG_PATH, label, imgname)

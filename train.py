@@ -14,12 +14,11 @@ ANNOTATION_PATH = WORKSPACE_PATH + '/annotations'
 IMAGE_PATH = WORKSPACE_PATH + '/images'
 MODEL_PATH = WORKSPACE_PATH + '/models'
 PRETRAINED_MODEL_PATH = WORKSPACE_PATH + '/pre-trained-models'
-CONFIG_PATH = MODEL_PATH + '/my_ssd_mobnet/pipeline.config'
-CHECKPOINT_PATH = MODEL_PATH + '/my_ssd_mobnet/'
 
 CUSTOM_MODEL_NAME = 'my_ssd_mobnet'
 CONFIG_PATH = MODEL_PATH + '/' + CUSTOM_MODEL_NAME + '/pipeline.config'
 
+labelQtd = 5
 labels = [
   {'name': 'Hello', 'id': 1},
   {'name': 'Yes', 'id': 2},
@@ -27,6 +26,8 @@ labels = [
   {'name': 'Thanks', 'id': 4},
   {'name': 'I Love You', 'id': 5}
 ]
+
+trainSteps = 20000
 
 #
 
@@ -72,7 +73,7 @@ with tf.io.gfile.GFile(CONFIG_PATH, 'r') as f:
   proto_str = f.read()
   text_format.Merge(proto_str, pipeline_config)
 
-pipeline_config.model.ssd.num_classes = 5
+pipeline_config.model.ssd.num_classes = labelQtd
 pipeline_config.train_config.batch_size = 4
 pipeline_config.train_config.fine_tune_checkpoint = PRETRAINED_MODEL_PATH+'/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8/checkpoint/ckpt-0'
 pipeline_config.train_config.fine_tune_checkpoint_type = 'detection'
@@ -113,12 +114,13 @@ def query_yes_no(question, default = 'yes'):
 print('[train.py] Maps and records ready!')
 runnow = query_yes_no('[train.py] Do you want to execute the training now?')
 
-runTrainingCommand = 'python {}/research/object_detection/model_main_tf2.py --model_dir={}/{} --pipeline_config_path={}/{}/pipeline.config --num_train_steps=10000'.format(
+runTrainingCommand = 'python {}/research/object_detection/model_main_tf2.py --model_dir={}/{} --pipeline_config_path={}/{}/pipeline.config --num_train_steps={}'.format(
   APIMODEL_PATH,
   MODEL_PATH,
   CUSTOM_MODEL_NAME,
   MODEL_PATH,
-  CUSTOM_MODEL_NAME
+  CUSTOM_MODEL_NAME,
+  trainSteps
 )
 
 if runnow:
